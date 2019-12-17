@@ -1,0 +1,7 @@
+dnspython==1.16.0
+eventlet==0.25.1
+greenlet==0.4.15
+monotonic==1.5
+python-engineio==3.11.1
+python-socketio==4.4.0
+six==1.13.0
