@@ -1,24 +1,14 @@
-import eventlet
-import socketio
+from flask import Flask
+from flask_socketio import SocketIO
 
-sio = socketio.Server()
-app = socketio.WSGIApp(sio)
-
-
-@sio.event
-def connect(sid, environ):
-    print('connect ', sid)
+app = Flask(__name__)
+socketio = SocketIO(app)
 
 
-@sio.event
-def my_message(sid, data):
-    print('message ', data)
+@socketio.on('message')
+def msg(msg):
+    print('msg ', msg)
 
 
-@sio.event
-def disconnect(sid):
-    print('disconnect ', sid)
-
-
-if __name__ == '__main__':
-    eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
+if __name__ == "__main__":
+    socketio.run(app, debug=True, host='0.0.0.0')
