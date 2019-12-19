@@ -52,11 +52,6 @@ def disconnect():
     clients.remove(request.namespace)
 
 
-@socketio.on('message')
-def msg(msg):
-    print('msg ', msg)
-
-
 @socketio.on('read_all_robots')
 def read_all_robots_command(data):
     return JSONEncoder().encode(read_robots())
