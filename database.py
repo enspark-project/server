@@ -15,6 +15,18 @@ def create_new_robot(name, key, robot_type, description, tags):
     })
 
 
+def push_gyro_data(robot_id, x, y, z, a, b, c):
+    database.gyro_data.inser_one({
+        'robot_id': robot_id,
+        'x': x,
+        'y': y,
+        'z': z,
+        'a': a,
+        'b': b,
+        'c': c
+    })
+
+
 def update_robot_data(id, name, key, description, tags):
     database.robots.update_one({'_id': id}, {
         'name': name,

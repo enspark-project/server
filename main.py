@@ -2,12 +2,12 @@ import datetime
 import json
 
 from bson import ObjectId
-from flask import Flask
+from flask import Flask, request
 from flask.json import jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
-from database import read_robots, create_new_robot, delete_robot, update_robot_data
+from database import read_robots, create_new_robot, delete_robot, update_robot_data, push_gyro_data
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -18,22 +18,38 @@ class JSONEncoder(json.JSONEncoder):
 
 
 clients = []
-
-@socketio.on('connect')
-def connected()
-    print "%s connected" % (request.namespace.socket.sessid)
-    clients.append(request.namespace)
-
-@socketio.on('disconnect')
-def disconnect():
-    print "%s disconnected" % (request.namespace.socket.sessid)
-    clients.remove(request.namespace)
-
+robots = []
 
 app = Flask(__name__)
 app.json_encoder = JSONEncoder
 CORS(app)
 socketio = SocketIO(app, logger=True, engineio_logger=True, async_handlers=True)
+
+
+@socketio.on('robot_register')
+def register(id, key):
+    robots[id] = request.namespace
+
+
+@socketio.on('move')
+def move(id, type, direction, delta):
+    robots[id].emit('robot_move', type, direction, delta)
+
+
+@socketio.on('push_gyro_data')
+def push_data(gyro_record):
+    push_gyro_data(gyro_record['robot_id'], gyro_record['x'], gyro_record['y'], gyro_record['z'], gyro_record['a'],
+                   gyro_record['b'], gyro_record['c'])
+
+
+@socketio.on('connect')
+def connected():
+    clients.append(request.namespace)
+
+
+@socketio.on('disconnect')
+def disconnect():
+    clients.remove(request.namespace)
 
 
 @socketio.on('message')
@@ -50,14 +66,15 @@ def read_all_robots_command(data):
 def create_new_robot_command(robot):
     create_new_robot(robot['name'], robot['key'], robot['robot_type'], robot['description'], robot['tags'])
 
+
 @socketio.on('delete_robot')
 def delete_robot_command(id):
     delete_robot(id)
 
+
 @socketio.on('update_robot')
 def update_robot_command(robot):
     update_robot_data(robot['id'], robot['name'], robot['key'], robot['description'], robot['tags'])
-
 
 
 if __name__ == "__main__":
