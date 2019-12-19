@@ -7,7 +7,7 @@ from flask.json import jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
-from database import read_robots, create_new_robot
+from database import read_robots, create_new_robot, delete_robot, update_robot_data
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -17,6 +17,17 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
+clients = []
+
+@socketio.on('connect')
+def connected()
+    print "%s connected" % (request.namespace.socket.sessid)
+    clients.append(request.namespace)
+
+@socketio.on('disconnect')
+def disconnect():
+    print "%s disconnected" % (request.namespace.socket.sessid)
+    clients.remove(request.namespace)
 
 
 app = Flask(__name__)
@@ -38,6 +49,15 @@ def read_all_robots_command(data):
 @socketio.on('create_new_robot')
 def create_new_robot_command(robot):
     create_new_robot(robot['name'], robot['key'], robot['robot_type'], robot['description'], robot['tags'])
+
+@socketio.on('delete_robot')
+def delete_robot_command(id):
+    delete_robot(id)
+
+@socketio.on('update_robot')
+def update_robot_command(robot):
+    update_robot_data(robot['id'], robot['name'], robot['key'], robot['description'], robot['tags'])
+
 
 
 if __name__ == "__main__":
