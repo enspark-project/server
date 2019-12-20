@@ -1,6 +1,8 @@
+import os
+
 from pymongo import MongoClient
 
-client = MongoClient('localhost')
+client = MongoClient(os.environ['DB_HOST'])
 
 database = client.enspark
 
@@ -16,7 +18,7 @@ def create_new_robot(name, key, robot_type, description, tags):
 
 
 def push_gyro_data(robot_id, x, y, z, a, b, c):
-    database.gyro_data.inser_one({
+    database.gyro_data.insert_one({
         'robot_id': robot_id,
         'x': x,
         'y': y,
