@@ -1,7 +1,11 @@
-<h1 align="center">Welcome to Enspark Server 🚀</h1>
+<h1 align="center">Enspark Server 🚀</h1>
 <p align="center">
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+    <img src="https://travis-ci.com/enspark-project/server.svg?branch=master">
+    <a href="https://microbadger.com/images/enspark/server" title="Get your own image badge on microbadger.com"><img src="https://images.microbadger.com/badges/image/enspark/server.svg"></a>
+    <a href="https://microbadger.com/images/enspark/server" title="Get your own version badge on microbadger.com"><img src="https://images.microbadger.com/badges/version/enspark/server.svg"></a>
+    <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/enspark/server">
   </a>
 </p>
 
