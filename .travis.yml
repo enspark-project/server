@@ -1,0 +1,14 @@
+language: generic
+services:
+  - docker
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+dist: xenial
+jobs:
+  include:
+    - stage: deploy
+      script:
+        - docker build -t enspark/server:build-$TRAVIS_BUILD_ID .
+        - if [[ "$TRAVIS_BRANCH" == "master" ]]; then docker tag enspark/server:build-$TRAVIS_BUILD_ID enspark/server; fi
+        - docker push enspark/server:build-$TRAVIS_BUILD_ID
+        - if [[ "$TRAVIS_BRANCH" == "master" ]]; then docker push enspark/server; fi
