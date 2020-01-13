@@ -8,7 +8,6 @@ dist: xenial
 jobs:
   include:
     - stage: deploy
-      install: false
       script:
         - docker build -t enspark/server:build-$TRAVIS_BUILD_ID .
         - if [[ "$TRAVIS_BRANCH" == "master" ]]; then docker tag enspark/server:build-$TRAVIS_BUILD_ID enspark/server; fi
