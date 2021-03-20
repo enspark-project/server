@@ -6,7 +6,7 @@ Flask-Cors==3.0.8
 Flask-SocketIO==4.2.1
 greenlet==0.4.15
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 mongoengine==0.18.2
 monotonic==1.5
